@@ -1,4 +1,7 @@
 node_modules/
 dist/
+web-ext-artifacts/
 *.log
+*.xpi
 .pnpm-config.json
+.env
