@@ -5,3 +5,4 @@ web-ext-artifacts/
 *.xpi
 .pnpm-config.json
 .env
+.amo-upload-uuid
