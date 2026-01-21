@@ -1,0 +1,15 @@
+{
+  "manifest_version": 2,
+  "name": "Markdown Renderer",
+  "version": "1.0.0",
+  "description": "Renders markdown files with GitHub-style dark theme and syntax highlighting",
+  "permissions": ["file:///*"],
+  "content_scripts": [
+    {
+      "matches": ["file:///*"],
+      "js": ["dist/content.js"],
+      "css": ["dist/styles.css"],
+      "run_at": "document_end"
+    }
+  ]
+}
