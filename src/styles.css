@@ -1,12 +1,12 @@
-/* GitHub Dark Dimmed Theme for Markdown */
+/* GitHub Dark Dimmed Theme (slightly warmer) */
 :root {
-  --color-canvas-default: #2d333b;
-  --color-canvas-subtle: #373e47;
-  --color-border-default: #30363d;
-  --color-border-muted: #21262d;
-  --color-fg-default: #adbac7;
-  --color-fg-muted: #8b949e;
-  --color-accent-fg: #58a6ff;
+  --color-canvas-default: #2f3338;
+  --color-canvas-subtle: #393d44;
+  --color-border-default: #33373d;
+  --color-border-muted: #24272c;
+  --color-fg-default: #b5bcc5;
+  --color-fg-muted: #929aa3;
+  --color-accent-fg: #6aadee;
 }
 
 * {
