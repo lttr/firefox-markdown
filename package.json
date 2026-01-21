@@ -7,13 +7,15 @@
     "build": "node build.js",
     "watch": "node build.js --watch",
     "release": "node build.js && web-ext build -s . -a ./web-ext-artifacts --overwrite-dest -i src node_modules pnpm-lock.yaml .aiwork .git",
-    "sign": "node build.js && web-ext sign -s . -a ./web-ext-artifacts -i src node_modules pnpm-lock.yaml .aiwork .git --channel=unlisted"
+    "sign": "node build.js && dotenv -- web-ext sign -s . -a ./web-ext-artifacts -i src node_modules pnpm-lock.yaml .aiwork .git --channel=unlisted"
   },
   "dependencies": {
+    "@shikijs/core": "^3.21.0",
     "marked": "^15.0.0",
     "shiki": "^1.24.0"
   },
   "devDependencies": {
+    "dotenv-cli": "^11.0.0",
     "esbuild": "^0.24.0",
     "web-ext": "^8.0.0"
   }

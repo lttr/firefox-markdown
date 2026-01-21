@@ -3,6 +3,12 @@
   "name": "Markdown Renderer",
   "version": "1.0.0",
   "description": "Renders markdown files with GitHub-style dark theme and syntax highlighting",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "markdown-renderer@lukas.dev",
+      "data_collection_permissions": { "required": ["none"] }
+    }
+  },
   "permissions": ["file:///*"],
   "content_scripts": [
     {

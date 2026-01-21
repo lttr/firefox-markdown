@@ -1,5 +1,7 @@
 import { marked } from 'marked';
-import { codeToHtml, bundledLanguages } from 'shiki';
+import { createHighlighter, bundledLanguages, type Highlighter } from 'shiki/bundle/web';
+
+let highlighter: Highlighter | null = null;
 
 // Only process .md files
 const url = window.location.href;
@@ -176,6 +178,12 @@ async function render() {
 
   if (!rawContent.trim()) return;
 
+  // Initialize highlighter - web bundle has common web languages
+  highlighter = await createHighlighter({
+    themes: ['github-dark'],
+    langs: Object.keys(bundledLanguages),
+  });
+
   // Parse frontmatter
   const { frontmatter, body: raw } = parseFrontmatter(rawContent.trim());
 
@@ -214,7 +222,7 @@ async function render() {
 
     try {
       const lang = block.lang in bundledLanguages ? block.lang : 'text';
-      const highlighted = await codeToHtml(block.code, {
+      const highlighted = highlighter!.codeToHtml(block.code, {
         lang,
         theme: 'github-dark',
       });
