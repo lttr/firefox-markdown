@@ -11,7 +11,19 @@ Firefox extension that renders local `.md` and `.markdown` files with a dark the
 
 ## Install
 
-Build from source.
+### Signed Version (Permanent)
+
+1. Set up `.env` with AMO API keys (see `.env.example`)
+2. `pnpm install && pnpm sign`
+3. Open generated `.xpi` in Firefox → auto-installs
+
+### Development Version (Temporary)
+
+1. `pnpm install && pnpm build`
+2. Firefox → `about:debugging` → This Firefox → Load Temporary Add-on
+3. Select `dist/manifest.json`
+
+Note: Temporary add-ons are removed on browser restart.
 
 ## Development
 
