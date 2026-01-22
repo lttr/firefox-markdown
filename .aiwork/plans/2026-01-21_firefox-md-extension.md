@@ -52,7 +52,7 @@ firefox-markdown/
 
 ## Verification
 1. Load as temporary extension in `about:debugging`
-2. Open `file:///home/lukas/work/drmax/drmax-nsf-global/docs/migration/vue-3-migration-cookbook.md`
+2. Open `file:// ... /cookbook.md`
 3. Verify: dark theme, centered, Vue code highlighted
 
 ## Decisions
