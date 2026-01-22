@@ -80,6 +80,24 @@ async function render() {
     return `<div id="${id}" class="shiki-placeholder"></div>`;
   };
 
+  const slugCounts = new Map<string, number>();
+  renderer.heading = ({ text, depth }) => {
+    const slug = text
+      .toLowerCase()
+      .replace(/<[^>]+>/g, '') // strip HTML tags
+      .replace(/[^\w\s-]/g, '') // remove special chars
+      .replace(/\s+/g, '-') // spaces to hyphens
+      .replace(/-+/g, '-') // collapse multiple hyphens
+      .trim();
+
+    // Handle duplicate slugs
+    const count = slugCounts.get(slug) || 0;
+    slugCounts.set(slug, count + 1);
+    const id = count > 0 ? `${slug}-${count}` : slug;
+
+    return `<h${depth} id="${id}">${text}</h${depth}>`;
+  };
+
   marked.use({ renderer, gfm: true, breaks: false });
 
   const html = await marked.parse(raw);
