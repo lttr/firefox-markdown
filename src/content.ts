@@ -1,7 +1,6 @@
 import { marked } from 'marked';
-import { createHighlighter, bundledLanguages, type Highlighter, type BundledLanguage } from 'shiki/bundle/web';
 
-let highlighter: Highlighter | null = null;
+declare const browser: { runtime: { getURL(path: string): string } };
 
 // Only process .md files
 const url = window.location.href;
@@ -53,10 +52,22 @@ function renderFrontmatter(fm: Record<string, unknown>): string {
   return `<div class="frontmatter">${rows.join('')}</div>`;
 }
 
+function waitForContent(): Promise<string> {
+  return new Promise(resolve => {
+    // If body already has content, use it
+    const pre = document.querySelector('pre');
+    if (pre?.textContent) return resolve(pre.textContent);
+
+    // Otherwise wait for DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', () => {
+      const pre = document.querySelector('pre');
+      resolve(pre?.textContent || document.body.innerText);
+    });
+  });
+}
+
 async function render() {
-  // Get raw markdown - Firefox wraps file content in <pre>
-  const pre = document.querySelector('pre');
-  const rawContent = pre?.textContent || document.body.innerText;
+  const rawContent = await waitForContent();
 
   if (!rawContent.trim()) return;
 
@@ -65,13 +76,9 @@ async function render() {
 
   // Configure marked
   const renderer = new marked.Renderer();
-  const codeBlocks: { id: string; code: string; lang: string }[] = [];
-  let blockId = 0;
-
   renderer.code = ({ text, lang }) => {
-    const id = `code-block-${blockId++}`;
-    codeBlocks.push({ id, code: text, lang: lang || 'text' });
-    return `<div id="${id}" class="shiki-placeholder"></div>`;
+    const encoded = encodeURIComponent(text);
+    return `<div class="shiki-placeholder" data-lang="${escapeHtml(lang || 'text')}" data-code="${encoded}"><pre><code>${escapeHtml(text)}</code></pre></div>`;
   };
 
   const slugCounts = new Map<string, number>();
@@ -108,35 +115,11 @@ async function render() {
     </body>
   `;
 
-  // Lazy-load only languages actually used in the document
-  if (codeBlocks.length > 0) {
-    const usedLangs = [...new Set(codeBlocks.map(b => b.lang))];
-    const validLangs = usedLangs.filter((l): l is BundledLanguage => l in bundledLanguages);
-
-    highlighter = await createHighlighter({
-      themes: ['github-dark'],
-      langs: [],
-    });
-
-    if (validLangs.length > 0) {
-      await highlighter.loadLanguage(...validLangs);
-    }
-
-    for (const block of codeBlocks) {
-      const placeholder = document.getElementById(block.id);
-      if (!placeholder) continue;
-
-      try {
-        const lang = block.lang in bundledLanguages ? block.lang : 'text';
-        const highlighted = highlighter.codeToHtml(block.code, {
-          lang,
-          theme: 'github-dark',
-        });
-        placeholder.outerHTML = highlighted;
-      } catch {
-        placeholder.outerHTML = `<pre><code>${escapeHtml(block.code)}</code></pre>`;
-      }
-    }
+  // Load Shiki highlighter asynchronously if there are code blocks
+  if (document.querySelector('.shiki-placeholder')) {
+    const script = document.createElement('script');
+    script.src = browser.runtime.getURL('dist/highlighter.js');
+    document.body.appendChild(script);
   }
 }
 

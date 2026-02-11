@@ -15,7 +15,8 @@
       "matches": ["file:///*"],
       "js": ["dist/content.js"],
       "css": ["dist/styles.css"],
-      "run_at": "document_end"
+      "run_at": "document_start"
     }
-  ]
+  ],
+  "web_accessible_resources": ["dist/highlighter.js"]
 }
