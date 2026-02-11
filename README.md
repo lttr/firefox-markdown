@@ -11,26 +11,33 @@ Firefox extension that renders local `.md` and `.markdown` files with a dark the
 
 ## Install
 
-### Signed Version (Permanent)
+```bash
+pnpm install
+pnpm install:firefox   # build + install into default Firefox profile
+```
 
-1. Set up `.env` with AMO API keys (see `.env.example`)
-2. `pnpm install && pnpm sign`
-3. Open generated `.xpi` in Firefox → auto-installs
+Restart Firefox to load the extension. Run `pnpm install:firefox` only once - after that, just rebuild and restart Firefox (or reload at `about:debugging`).
 
-### Development Version (Temporary)
+### Distribution
 
-1. `pnpm install && pnpm build`
-2. Firefox → `about:debugging` → This Firefox → Load Temporary Add-on
-3. Select `dist/manifest.json`
+- **`pnpm release`** - packages an unsigned `.xpi` archive. Useful for sharing or backing up the extension, but Firefox won't install unsigned extensions in release builds.
+- **`pnpm sign`** - submits the extension to AMO (addons.mozilla.org) for signing and downloads the signed `.xpi`. Signed extensions can be installed permanently on any Firefox without profile-level setup. Requires `.env` with `WEB_EXT_API_KEY` and `WEB_EXT_API_SECRET` (see `.env.example`).
 
-Note: Temporary add-ons are removed on browser restart.
+## Scripts
+
+- **`pnpm build`** - production build to `dist/`
+- **`pnpm watch`** - dev mode with auto-rebuild
+- **`pnpm install:firefox`** - build + install extension into Firefox profile
+- **`pnpm release`** - build + package unsigned `.xpi` for manual distribution or testing
+- **`pnpm sign`** - build + sign via AMO for permanent install without profile tricks (requires `.env`)
 
 ## Development
 
 ```bash
 pnpm install
-pnpm watch    # dev mode with auto-rebuild
-pnpm build    # production build
+pnpm install:firefox   # one-time setup
+pnpm watch             # rebuild on changes
+# restart Firefox or reload extension at about:debugging to see changes
 ```
 
 ## License
