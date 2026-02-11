@@ -1,5 +1,5 @@
 import { marked } from 'marked';
-import { createHighlighter, bundledLanguages, type Highlighter } from 'shiki/bundle/web';
+import { createHighlighter, bundledLanguages, type Highlighter, type BundledLanguage } from 'shiki/bundle/web';
 
 let highlighter: Highlighter | null = null;
 
@@ -60,12 +60,6 @@ async function render() {
 
   if (!rawContent.trim()) return;
 
-  // Initialize highlighter - web bundle has common web languages
-  highlighter = await createHighlighter({
-    themes: ['github-dark'],
-    langs: Object.keys(bundledLanguages),
-  });
-
   // Parse frontmatter
   const { frontmatter, body: raw } = parseFrontmatter(rawContent.trim());
 
@@ -102,7 +96,7 @@ async function render() {
 
   const html = await marked.parse(raw);
 
-  // Build new document (CSS loaded externally via manifest)
+  // Inject HTML immediately so content is visible before Shiki loads
   document.documentElement.innerHTML = `
     <head>
       <meta charset="utf-8">
@@ -114,20 +108,34 @@ async function render() {
     </body>
   `;
 
-  // Highlight code blocks
-  for (const block of codeBlocks) {
-    const placeholder = document.getElementById(block.id);
-    if (!placeholder) continue;
+  // Lazy-load only languages actually used in the document
+  if (codeBlocks.length > 0) {
+    const usedLangs = [...new Set(codeBlocks.map(b => b.lang))];
+    const validLangs = usedLangs.filter((l): l is BundledLanguage => l in bundledLanguages);
 
-    try {
-      const lang = block.lang in bundledLanguages ? block.lang : 'text';
-      const highlighted = highlighter!.codeToHtml(block.code, {
-        lang,
-        theme: 'github-dark',
-      });
-      placeholder.outerHTML = highlighted;
-    } catch {
-      placeholder.outerHTML = `<pre><code>${escapeHtml(block.code)}</code></pre>`;
+    highlighter = await createHighlighter({
+      themes: ['github-dark'],
+      langs: [],
+    });
+
+    if (validLangs.length > 0) {
+      await highlighter.loadLanguage(...validLangs);
+    }
+
+    for (const block of codeBlocks) {
+      const placeholder = document.getElementById(block.id);
+      if (!placeholder) continue;
+
+      try {
+        const lang = block.lang in bundledLanguages ? block.lang : 'text';
+        const highlighted = highlighter.codeToHtml(block.code, {
+          lang,
+          theme: 'github-dark',
+        });
+        placeholder.outerHTML = highlighted;
+      } catch {
+        placeholder.outerHTML = `<pre><code>${escapeHtml(block.code)}</code></pre>`;
+      }
     }
   }
 }
