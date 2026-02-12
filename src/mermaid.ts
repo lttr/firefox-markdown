@@ -20,6 +20,15 @@ async function renderMermaid() {
       console.error('[mermaid]', e);
     }
   }
+
+  // Click-to-zoom: toggle fullscreen overlay
+  for (const el of document.querySelectorAll<HTMLElement>('.mermaid-diagram')) {
+    el.style.cursor = 'zoom-in';
+    el.addEventListener('click', () => {
+      el.classList.toggle('mermaid-fullscreen');
+      el.style.cursor = el.classList.contains('mermaid-fullscreen') ? 'zoom-out' : 'zoom-in';
+    });
+  }
 }
 
 renderMermaid().catch(console.error);

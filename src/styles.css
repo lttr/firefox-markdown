@@ -222,3 +222,17 @@ body {
   max-width: 100%;
   height: auto;
 }
+
+.mermaid-diagram.mermaid-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  margin: 0;
+  padding: 24px;
+  background: var(--color-canvas-default);
+  overflow: auto;
+}
+
+.mermaid-diagram.mermaid-fullscreen svg {
+  max-width: none;
+}
