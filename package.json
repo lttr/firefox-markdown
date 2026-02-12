@@ -8,7 +8,8 @@
     "install:firefox": "node build.js && node install.js",
     "watch": "node build.js --watch",
     "release": "node build.js && web-ext build -s . -a ./web-ext-artifacts --overwrite-dest -i src node_modules pnpm-lock.yaml .aiwork .git",
-    "sign": "node build.js && dotenv -- web-ext sign -s . -a ./web-ext-artifacts -i src node_modules pnpm-lock.yaml .aiwork .git --channel=unlisted"
+    "sign": "node build.js && dotenv -- web-ext sign -s . -a ./web-ext-artifacts -i src node_modules pnpm-lock.yaml .aiwork .git --channel=unlisted",
+    "test:open": "firefox test.md"
   },
   "dependencies": {
     "@shikijs/core": "^3.21.0",
