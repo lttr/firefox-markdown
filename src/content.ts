@@ -78,6 +78,9 @@ async function render() {
   const renderer = new marked.Renderer();
   renderer.code = ({ text, lang }) => {
     const encoded = encodeURIComponent(text);
+    if (lang === 'mermaid') {
+      return `<div class="mermaid-placeholder" data-code="${encoded}"><pre><code>${escapeHtml(text)}</code></pre></div>`;
+    }
     return `<div class="shiki-placeholder" data-lang="${escapeHtml(lang || 'text')}" data-code="${encoded}"><pre><code>${escapeHtml(text)}</code></pre></div>`;
   };
 
@@ -97,6 +100,12 @@ async function render() {
     const id = count > 0 ? `${slug}-${count}` : slug;
 
     return `<h${depth} id="${id}">${text}</h${depth}>`;
+  };
+
+  renderer.html = ({ text }) => {
+    const m = text.match(/^<!--([\s\S]*?)-->$/);
+    if (m) return `<div class="md-comment">${escapeHtml(m[1].trim())}</div>`;
+    return text;
   };
 
   marked.use({ renderer, gfm: true, breaks: false });
@@ -119,6 +128,13 @@ async function render() {
   if (document.querySelector('.shiki-placeholder')) {
     const script = document.createElement('script');
     script.src = browser.runtime.getURL('dist/highlighter.js');
+    document.body.appendChild(script);
+  }
+
+  // Load mermaid renderer asynchronously if there are mermaid blocks
+  if (document.querySelector('.mermaid-placeholder')) {
+    const script = document.createElement('script');
+    script.src = browser.runtime.getURL('dist/mermaid.js');
     document.body.appendChild(script);
   }
 }
