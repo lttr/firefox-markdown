@@ -2,6 +2,8 @@ import { marked } from 'marked';
 
 declare const browser: { runtime: { getURL(path: string): string } };
 
+let savedRawContent = '';
+
 // Only process .md files
 const url = window.location.href;
 if (!url.endsWith('.md') && !url.endsWith('.markdown')) {
@@ -71,6 +73,8 @@ async function render() {
 
   if (!rawContent.trim()) return;
 
+  savedRawContent = rawContent.trim();
+
   // Parse frontmatter
   const { frontmatter, body: raw } = parseFrontmatter(rawContent.trim());
 
@@ -137,6 +141,34 @@ async function render() {
     script.src = browser.runtime.getURL('dist/mermaid.js');
     document.body.appendChild(script);
   }
+
+  // Toggle button for raw/rendered view
+  const toggle = document.createElement('button');
+  toggle.className = 'view-toggle';
+  toggle.textContent = 'Source';
+  document.body.appendChild(toggle);
+
+  let rawPre: HTMLPreElement | null = null;
+  const markdownBody = document.querySelector('.markdown-body') as HTMLElement;
+
+  toggle.addEventListener('click', () => {
+    const showingRendered = markdownBody.style.display !== 'none';
+    if (showingRendered) {
+      if (!rawPre) {
+        rawPre = document.createElement('pre');
+        rawPre.className = 'raw-source';
+        rawPre.textContent = savedRawContent;
+        document.body.appendChild(rawPre);
+      }
+      markdownBody.style.display = 'none';
+      rawPre.style.display = '';
+      toggle.textContent = 'Rendered';
+    } else {
+      markdownBody.style.display = '';
+      if (rawPre) rawPre.style.display = 'none';
+      toggle.textContent = 'Source';
+    }
+  });
 }
 
 function escapeHtml(text: string): string {
