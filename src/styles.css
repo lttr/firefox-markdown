@@ -1,12 +1,12 @@
 /* Dark Warm Theme */
 :root {
-  --color-canvas-default: #33302c;
-  --color-canvas-subtle: #3d3a35;
-  --color-border-default: #3f3b36;
-  --color-border-muted: #292724;
-  --color-fg-default: #c4bdb5;
-  --color-fg-muted: #a09891;
-  --color-accent-fg: #b89a72;
+  --color-canvas-default: #313131;
+  --color-canvas-subtle: #3b3b3c;
+  --color-border-default: #3c3a39;
+  --color-border-muted: #272628;
+  --color-fg-default: #bcbcba;
+  --color-fg-muted: #999797;
+  --color-accent-fg: #c0a882;
 }
 
 * {
