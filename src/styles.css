@@ -1,12 +1,12 @@
-/* GitHub Dark Dimmed Theme (slightly warmer) */
+/* Dark Warm Theme */
 :root {
-  --color-canvas-default: #2f3338;
-  --color-canvas-subtle: #393d44;
-  --color-border-default: #33373d;
-  --color-border-muted: #24272c;
-  --color-fg-default: #b5bcc5;
-  --color-fg-muted: #929aa3;
-  --color-accent-fg: #6aadee;
+  --color-canvas-default: #33302c;
+  --color-canvas-subtle: #3d3a35;
+  --color-border-default: #3f3b36;
+  --color-border-muted: #292724;
+  --color-fg-default: #c4bdb5;
+  --color-fg-muted: #a09891;
+  --color-accent-fg: #b89a72;
 }
 
 * {
