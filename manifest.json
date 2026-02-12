@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Markdown Renderer",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Renders markdown files with GitHub-style dark theme and syntax highlighting",
   "browser_specific_settings": {
     "gecko": {
@@ -18,5 +18,5 @@
       "run_at": "document_start"
     }
   ],
-  "web_accessible_resources": ["dist/highlighter.js"]
+  "web_accessible_resources": ["dist/highlighter.js", "dist/mermaid.js"]
 }
