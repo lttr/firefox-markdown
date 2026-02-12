@@ -22,14 +22,20 @@ const highlighterCtx = await esbuild.context({
   outfile: 'dist/highlighter.js',
 });
 
+const mermaidCtx = await esbuild.context({
+  ...shared,
+  entryPoints: ['src/mermaid.ts'],
+  outfile: 'dist/mermaid.js',
+});
+
 // Copy CSS to dist
 copyFileSync('src/styles.css', 'dist/styles.css');
 
 if (watch) {
-  await Promise.all([ctx.watch(), highlighterCtx.watch()]);
+  await Promise.all([ctx.watch(), highlighterCtx.watch(), mermaidCtx.watch()]);
   console.log('Watching...');
 } else {
-  await Promise.all([ctx.rebuild(), highlighterCtx.rebuild()]);
-  await Promise.all([ctx.dispose(), highlighterCtx.dispose()]);
+  await Promise.all([ctx.rebuild(), highlighterCtx.rebuild(), mermaidCtx.rebuild()]);
+  await Promise.all([ctx.dispose(), highlighterCtx.dispose(), mermaidCtx.dispose()]);
   console.log('Build complete');
 }
