@@ -107,12 +107,13 @@ async function render() {
   };
 
   renderer.html = ({ text }) => {
-    const m = text.match(/^<!--([\s\S]*?)-->$/);
+    const trimmed = text.trim();
+    const m = trimmed.match(/^<!--([\s\S]*?)-->$/);
     if (m) return `<div class="md-comment">${escapeHtml(m[1].trim())}</div>`;
     return text;
   };
 
-  marked.use({ renderer, gfm: true, breaks: false });
+  marked.use({ renderer, gfm: true, breaks: true });
 
   const html = await marked.parse(raw);
 
