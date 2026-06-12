@@ -1,4 +1,5 @@
 import { marked } from 'marked';
+import styles from './styles.css';
 
 declare const browser: { runtime: { getURL(path: string): string } };
 
@@ -122,7 +123,7 @@ async function render() {
     <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1">
-      <link rel="stylesheet" href="${browser.runtime.getURL('dist/styles.css')}">
+      <style>${styles}</style>
       <title>${document.title || 'Markdown'}</title>
     </head>
     <body>

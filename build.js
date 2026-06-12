@@ -1,5 +1,4 @@
 import * as esbuild from 'esbuild';
-import { copyFileSync } from 'fs';
 
 const watch = process.argv.includes('--watch');
 
@@ -14,6 +13,7 @@ const ctx = await esbuild.context({
   ...shared,
   entryPoints: ['src/content.ts'],
   outfile: 'dist/content.js',
+  loader: { '.css': 'text' },
 });
 
 const highlighterCtx = await esbuild.context({
@@ -27,9 +27,6 @@ const mermaidCtx = await esbuild.context({
   entryPoints: ['src/mermaid.ts'],
   outfile: 'dist/mermaid.js',
 });
-
-// Copy CSS to dist
-copyFileSync('src/styles.css', 'dist/styles.css');
 
 if (watch) {
   await Promise.all([ctx.watch(), highlighterCtx.watch(), mermaidCtx.watch()]);

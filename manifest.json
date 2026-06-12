@@ -17,5 +17,5 @@
       "run_at": "document_start"
     }
   ],
-  "web_accessible_resources": ["dist/highlighter.js", "dist/mermaid.js", "dist/styles.css"]
+  "web_accessible_resources": ["dist/highlighter.js", "dist/mermaid.js"]
 }
