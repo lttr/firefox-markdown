@@ -5,8 +5,8 @@ declare const browser: { runtime: { getURL(path: string): string } };
 let savedRawContent = '';
 
 // Only process .md files
-const url = window.location.href;
-if (!url.endsWith('.md') && !url.endsWith('.markdown')) {
+const path = window.location.pathname;
+if (!path.endsWith('.md') && !path.endsWith('.markdown')) {
   throw new Error('Not a markdown file');
 }
 
@@ -122,6 +122,7 @@ async function render() {
     <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="${browser.runtime.getURL('dist/styles.css')}">
       <title>${document.title || 'Markdown'}</title>
     </head>
     <body>
