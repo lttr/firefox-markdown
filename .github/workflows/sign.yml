@@ -28,8 +28,9 @@ jobs:
       - name: Rename signed xpi to predictable name
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
+          DEST="web-ext-artifacts/markdown_renderer-${VERSION}.xpi"
           SIGNED=$(ls web-ext-artifacts/*.xpi | head -1)
-          cp "$SIGNED" "web-ext-artifacts/markdown_renderer-${VERSION}.xpi"
+          [ "$SIGNED" = "$DEST" ] || cp "$SIGNED" "$DEST"
 
       - name: Publish GitHub release
         uses: softprops/action-gh-release@v2

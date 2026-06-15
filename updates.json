@@ -3,8 +3,8 @@
     "markdown-renderer@lukas.dev": {
       "updates": [
         {
-          "version": "1.1.5",
-          "update_link": "https://github.com/lttr/firefox-markdown/releases/download/v1.1.5/markdown_renderer-1.1.5.xpi"
+          "version": "1.1.6",
+          "update_link": "https://github.com/lttr/firefox-markdown/releases/download/v1.1.6/markdown_renderer-1.1.6.xpi"
         }
       ]
     }
