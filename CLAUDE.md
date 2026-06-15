@@ -8,9 +8,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 pnpm install        # install dependencies
 pnpm build          # production build → dist/
 pnpm watch          # dev mode with auto-rebuild
-pnpm release        # build + package .xpi (unsigned)
-pnpm sign           # build + sign for AMO (requires .env with API keys)
+pnpm release        # bump version, tag, push → CI signs on AMO + publishes GitHub release
+pnpm release minor  # (or major / X.Y.Z) — see release.js
 ```
+
+## Releasing
+
+`pnpm release` (release.js) bumps the version in `manifest.json` + `package.json`,
+regenerates `updates.json`, builds, commits, tags `vX.Y.Z`, and pushes. The
+`Sign & Release` workflow (`.github/workflows/sign.yml`) then signs the add-on
+unlisted on AMO (`pnpm sign:ci`, needs `WEB_EXT_API_KEY`/`WEB_EXT_API_SECRET`
+repo secrets) and attaches `markdown_renderer-X.Y.Z.xpi` to the GitHub release.
+
+Self-distribution auto-update: `manifest.json` `update_url` → `updates.json` on
+master (raw.githubusercontent) → the `vX.Y.Z` release asset. Each AMO version is
+single-use, so always bump before releasing.
 
 ## Architecture
 
@@ -28,6 +40,5 @@ Firefox extension (Manifest V2) that renders local `.md`/`.markdown` files.
 
 ## Environment
 
-`.env` needed for signing (see `.env.example`):
-- `WEB_EXT_API_KEY` - AMO API key
-- `WEB_EXT_API_SECRET` - AMO API secret
+Signing runs in CI from repo secrets `WEB_EXT_API_KEY` / `WEB_EXT_API_SECRET`
+(AMO API credentials). No local `.env` is needed for the release flow.

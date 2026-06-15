@@ -5,10 +5,10 @@ import { execSync } from "node:child_process";
 // CI (.github/workflows/sign.yml) then signs on AMO and publishes the release.
 //
 // Usage:
-//   node bump.js            # patch bump (1.1.6 -> 1.1.7)
-//   node bump.js minor      # 1.1.6 -> 1.2.0
-//   node bump.js major      # 1.1.6 -> 2.0.0
-//   node bump.js 1.4.2      # explicit version
+//   pnpm release            # patch bump (1.1.6 -> 1.1.7)
+//   pnpm release minor      # 1.1.6 -> 1.2.0
+//   pnpm release major      # 1.1.6 -> 2.0.0
+//   pnpm release 1.4.2      # explicit version
 
 const run = (cmd) => execSync(cmd, { stdio: "pipe" }).toString().trim();
 
@@ -56,7 +56,27 @@ const bump = (file) => {
 };
 bump("manifest.json");
 bump("package.json");
-execSync("node gen-updates.js", { stdio: "inherit" });
+
+// updates.json drives Firefox self-distribution auto-update: the manifest's
+// update_url points here, and update_link resolves to the v<next> release asset.
+const REPO = "lttr/firefox-markdown";
+const id = manifest.browser_specific_settings.gecko.id;
+const updates = {
+  addons: {
+    [id]: {
+      updates: [
+        {
+          version: next,
+          update_link: `https://github.com/${REPO}/releases/download/${tag}/markdown_renderer-${next}.xpi`,
+        },
+      ],
+    },
+  },
+};
+writeFileSync("updates.json", JSON.stringify(updates, null, 2) + "\n");
+
+// --- build locally to fail fast before burning an AMO version ----------------
+execSync("node build.js", { stdio: "inherit" });
 
 // --- commit, tag, push -------------------------------------------------------
 execSync("git add manifest.json package.json updates.json", { stdio: "inherit" });
