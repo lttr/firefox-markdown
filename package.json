@@ -11,6 +11,7 @@
     "sign": "node build.js && dotenv -- web-ext sign -s . -a ./web-ext-artifacts -i src node_modules pnpm-lock.yaml .aiwork .git --channel=unlisted",
     "sign:listed": "node build.js && dotenv -- web-ext sign -s . -a ./web-ext-artifacts -i src node_modules pnpm-lock.yaml .aiwork .git --channel=listed",
     "sign:ci": "node build.js && web-ext sign -s . -a ./web-ext-artifacts -i src node_modules pnpm-lock.yaml .aiwork .git --channel=unlisted",
+    "bump": "node bump.js",
     "test:open": "firefox test.md"
   },
   "dependencies": {
