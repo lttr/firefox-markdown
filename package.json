@@ -10,6 +10,7 @@
     "release": "node build.js && web-ext build -s . -a ./web-ext-artifacts --overwrite-dest -i src node_modules pnpm-lock.yaml .aiwork .git",
     "sign": "node build.js && dotenv -- web-ext sign -s . -a ./web-ext-artifacts -i src node_modules pnpm-lock.yaml .aiwork .git --channel=unlisted",
     "sign:listed": "node build.js && dotenv -- web-ext sign -s . -a ./web-ext-artifacts -i src node_modules pnpm-lock.yaml .aiwork .git --channel=listed",
+    "sign:ci": "node build.js && web-ext sign -s . -a ./web-ext-artifacts -i src node_modules pnpm-lock.yaml .aiwork .git --channel=unlisted",
     "test:open": "firefox test.md"
   },
   "dependencies": {
