@@ -90,7 +90,8 @@ async function render() {
   };
 
   const slugCounts = new Map<string, number>();
-  renderer.heading = ({ text, depth }) => {
+  renderer.heading = function ({ tokens, text, depth }) {
+    const content = this.parser.parseInline(tokens);
     const slug = text
       .toLowerCase()
       .replace(/<[^>]+>/g, '') // strip HTML tags
@@ -104,7 +105,7 @@ async function render() {
     slugCounts.set(slug, count + 1);
     const id = count > 0 ? `${slug}-${count}` : slug;
 
-    return `<h${depth} id="${id}">${text}</h${depth}>`;
+    return `<h${depth} id="${id}">${content}</h${depth}>`;
   };
 
   renderer.html = ({ text }) => {
