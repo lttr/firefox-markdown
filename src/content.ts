@@ -115,7 +115,7 @@ async function render() {
     return text;
   };
 
-  marked.use({ renderer, gfm: true, breaks: true });
+  marked.use({ renderer, gfm: true, breaks: false });
 
   const html = await marked.parse(raw);
 
