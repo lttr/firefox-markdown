@@ -28,8 +28,12 @@ body {
 }
 
 .markdown-body {
-  max-width: 900px;
-  margin: 0 auto;
+  /* Prose sits in a narrow measure; code blocks and tables may grow past it. */
+  --measure: 80ch;
+  --wide: min(1100px, 100vw - 32px);
+  display: grid;
+  grid-template-columns: minmax(0, var(--measure));
+  justify-content: center;
 }
 
 /* Headings */
@@ -268,4 +272,14 @@ body {
   font-size: 14px;
   line-height: 1.6;
   color: var(--color-fg-default);
+}
+
+/* Breakout: code blocks and tables may exceed the prose measure */
+.markdown-body > pre,
+.markdown-body > .shiki,
+.markdown-body > table {
+  width: max-content;
+  min-width: 100%;
+  max-width: var(--wide);
+  justify-self: center;
 }
